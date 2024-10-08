@@ -1,24 +1,31 @@
+<script setup>
+import { ref, watch } from "vue";
+import srcQuiz from "./data/quizes.json";
+import QuizCard from "./components/QuizCard.vue";
+const quizes = ref(srcQuiz);
+const search = ref("");
+watch(search, () => {
+  quizes.value = srcQuiz.filter((quiz) => {
+    return quiz.title.toLowerCase().includes(search.value.toLowerCase());
+  });
+});
+</script>
 <template>
   <main>
     <header>
       <h1 id="title">Quizz Vue</h1>
-      <input type="text" id="search-input">
+      <input v-model.trim="search" type="text" id="search-input">
     </header>
     <section id="quiz-container">
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+      <!-- <div v-for="quiz in quizes" :key="quiz.id" class="card">
+        <img :src="quiz.img" :alt="quiz.title">
         <div class="card-body">
-          <h2>Programming</h2>
-          <p>2 Question</p>
+          <h2>{{ quiz.title }}</h2>
+          <p>{{ quiz.questions.length }} Question</p>
         </div>
-      </div>
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-        <div class="card-body">
-          <h2>Programming</h2>
-          <p>2 Question</p>
-        </div>
-      </div>
+      </div> -->
+
+      <QuizCard v-for="quiz in quizes" :key="quiz.id" :quiz="quiz"/>
     </section>
   </main>
 </template>
@@ -52,30 +59,5 @@ header{
   display: flex;
   flex-wrap: wrap;
   margin-top: 20px;
-}
-
-.card{
-  width: 270px;
-  margin-right: 30px;
-  margin-bottom:30px;
-  border-radius: 5px;
-  overflow:hidden;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.card img{
-  width: 100%;
-  height:200px;
-  object-fit:cover;
-  margin: 0;
-}
-
-.card-body{
-  padding: 0 15px;
-}
-
-.card-body h2{
-  font-weight: bold;
-
 }
 </style>
